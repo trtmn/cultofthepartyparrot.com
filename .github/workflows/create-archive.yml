@@ -13,6 +13,12 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
+    - name: Set Git User and Email
+      run: |
+        git config user.email "${{ github.actor }}@users.noreply.github.com"
+        git config user.name "${{ github.actor }}"
+      shell: bash
+
     - name: Remove existing GIF archive if it exists
       run: |
         if [ -f mastodon-emoji-bundle.tar.gz ]; then
