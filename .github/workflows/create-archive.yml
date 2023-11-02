@@ -23,7 +23,7 @@ jobs:
     - name: Create GIF archive
       run: |
         mkdir -p output
-        find guests -name "*.gif" -exec cp {} output/ \;
+        find guests parrots flags -type f -name "*.gif" -exec cp {} output/ \;
         tar czf guests.tar.gz -C output .
       shell: bash
 
