@@ -1,4 +1,4 @@
-name: Create GIF Archive and Release
+name: Create GIF Archive, Tag, and Upload Artifact
 
 on:
   push:
@@ -12,11 +12,6 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v2
-
-    - name: Set up Python
-      uses: actions/setup-python@v2
-      with:
-        python-version: 3.x
 
     - name: Remove existing GIF archive if it exists
       run: |
@@ -32,28 +27,14 @@ jobs:
         tar czf mastodon-emoji-bundle.tar.gz -C output .
       shell: bash
 
-    - name: Create Release
-      id: create_release
-      uses: actions/create-release@v1
-      with:
-        tag_name: v${{ github.run_number }}
-        release_name: Release v${{ github.run_number }}
-        files: mastodon-emoji-bundle.tar.gz
+    - name: Tag with Commit Hash
+      run: |
+        git tag -a $(git log --format=%h -n 1) -m "Tagging with commit hash"
+        git push origin --tags
+      shell: bash
 
     - name: Upload Artifact
       uses: actions/upload-artifact@v2
       with:
         name: mastodon-emoji-bundle
         path: mastodon-emoji-bundle.tar.gz
-
-    - name: Set Build Number
-      run: echo "BUILD_NUMBER=${{ github.run_number }}" >> $GITHUB_ENV
-
-    - name: Commit and push BUILD_NUMBER
-      run: |
-        git config --local user.email "action@github.com"
-        git config --local user.name "GitHub Action"
-        git add $GITHUB_ENV
-        git commit -m "Add build number"
-        git push
-      shell: bash
