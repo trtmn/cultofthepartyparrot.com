@@ -25,7 +25,7 @@ jobs:
         mkdir -p output
         find guests -name "*.gif" -exec cp {} output/ \;
         tar czf guests.tar.gz -C output .
-        mv guests.tar.gz ../
+        mv -f guests.tar.gz ../
       shell: bash
 
     - name: Commit and push changes
