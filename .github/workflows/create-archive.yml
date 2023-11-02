@@ -15,8 +15,8 @@ jobs:
 
     - name: Remove existing GIF archive if it exists
       run: |
-        if [ -f guests.tar.gz ]; then
-          rm guests.tar.gz
+        if [ -f mastodon-emoji-bundle.tar.gz ]; then
+          rm mastodon-emoji-bundle.tar.gz
         fi
       shell: bash
 
@@ -24,14 +24,14 @@ jobs:
       run: |
         mkdir -p output
         find guests parrots flags -type f -name "*.gif" -exec cp {} output/ \;
-        tar czf guests.tar.gz -C output .
+        tar czf mastodon-emoji-bundle.tar.gz -C output .
       shell: bash
 
     - name: Commit and push changes
       run: |
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
-        git add guests.tar.gz
+        git add mastodon-emoji-bundle.tar.gz
         git commit -m "Add GIF archive"
         git push
       shell: bash
