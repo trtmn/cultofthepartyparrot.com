@@ -1,4 +1,4 @@
-name: Create Image Archive
+name: Create GIF Archive
 
 on:
   push:
@@ -13,36 +13,12 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Set up Python
-      uses: actions/setup-python@v2
-      with:
-        python-version: 3.x  # Use Python 3.x
-
-    - name: Install dependencies
-      run: |
-        pip install Pillow  # Required for image resizing
-        pip install py7zr  # Required for creating .tar.gz archive
-      shell: bash
-
-    - name: Resize and archive images
+    - name: Create GIF archive
       run: |
         mkdir -p output
-        for file in guests/*.png; do
-          filename=$(basename -- "$file")
-          extension="${filename##*.}"
-          filename_noext="${filename%.*}"
-          output_file="output/${filename_noext}_resized.${extension}"
-
-          # Resize the image to a maximum size of 50KB
-          python -c "from PIL import Image; img = Image.open('$file'); img.save('$output_file', quality=50)"
-        done
-
-        # Create a .tar.gz archive
+        find guests -name "*.gif" -exec cp {} output/ \;
         tar czf guests.tar.gz -C output .
-
-        # Move the archive to the root of the repository
         mv guests.tar.gz ../
-
       shell: bash
 
     - name: Commit and push changes
@@ -50,6 +26,6 @@ jobs:
         git config --local user.email "action@github.com"
         git config --local user.name "GitHub Action"
         git add guests.tar.gz
-        git commit -m "Add resized image archive"
+        git commit -m "Add GIF archive"
         git push
       shell: bash
