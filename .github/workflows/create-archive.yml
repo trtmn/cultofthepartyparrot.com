@@ -13,6 +13,13 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
+    - name: Remove existing GIF archive if it exists
+      run: |
+        if [ -f guests.tar.gz ]; then
+          rm guests.tar.gz
+        fi
+      shell: bash
+
     - name: Create GIF archive
       run: |
         mkdir -p output
