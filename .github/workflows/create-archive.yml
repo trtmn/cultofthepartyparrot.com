@@ -13,13 +13,6 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Create GIF archive
-      run: |
-        mkdir -p output
-        find guests -name "*.gif" -exec cp {} output/ \;
-        tar czf guests.tar.gz -C output .
-      shell: bash
-
     - name: Remove existing GIF archive if it exists
       run: |
         if [ -f guests.tar.gz ]; then
@@ -27,11 +20,11 @@ jobs:
         fi
       shell: bash
 
-    - name: Move the created GIF archive
+    - name: Create GIF archive
       run: |
-        if [ -f guests.tar.gz ]; then
-          mv guests.tar.gz ./
-        fi
+        mkdir -p output
+        find guests -name "*.gif" -exec cp {} output/ \;
+        tar czf guests.tar.gz -C output .
       shell: bash
 
     - name: Commit and push changes
